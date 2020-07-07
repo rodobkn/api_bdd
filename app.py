@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, abort, json
 from pymongo import MongoClient
 import pandas as pd
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import os
 import unicodedata
 
@@ -66,7 +66,7 @@ def home():
     '''
     Página de inicio
     '''
-    return "<h1>¡Hola!</h1>"
+    return "<h1>¡Hola, subi algo nuevo!</h1>"
 
 # Mapeamos esta función a la ruta '/plot' con el método get.
 @app.route("/plot")
@@ -143,6 +143,36 @@ def get_message(mid):
 
 
     return json.jsonify(mensajes_a_mostrar)
+
+
+###ENTREGA 5
+
+@app.route("/enviados/<int:sender>")
+def get_message_enviados(sender):
+    '''
+    Obtiene todos los atributos de los mensajes recibidos por el usuario connectado
+    '''
+    mensajes_a_mostrar = list(mensajes.find({"sender": sender}, {"_id": 0}))
+
+    if mensajes_a_mostrar == []:
+        return json.jsonify({"error": f"no existe mensajes enviados por id = {sender}"})
+
+
+    return json.jsonify(mensajes_a_mostrar)
+
+@app.route("/recividos/<int:receptant>")
+def get_message_recividos(receptant):
+    '''
+    Obtiene todos los atributos de los mensajes recibidos por el usuario connectado
+    '''
+    mensajes_a_mostrar = list(mensajes.find({"receptant": receptant}, {"_id": 0}))
+
+    if mensajes_a_mostrar == []:
+        return json.jsonify({"error": f"no existe mensajes recividos por id = {receptant}"})
+
+
+    return json.jsonify(mensajes_a_mostrar)
+
 
 @app.route("/users/<int:uid>")
 def get_user(uid):
