@@ -66,7 +66,7 @@ def home():
     '''
     Página de inicio
     '''
-    return "<h1>¡Hola, subi algo nuevo!</h1>"
+    return "<h1>¡Hola, subi algo nuevo! 2</h1>"
 
 # Mapeamos esta función a la ruta '/plot' con el método get.
 @app.route("/plot")
@@ -187,6 +187,18 @@ def get_user(uid):
         return json.jsonify({"error": f"no existe el id = {uid}"})
 
     return json.jsonify(final)
+
+@app.route("/users/username/<string:name>")
+def get_username(name):
+    '''
+    Obtiene el usuario de id entregada
+    '''
+    users = list(usuarios.find({"name": name}, {"_id": 0}))
+
+    if users == []:
+        return json.jsonify({"error": f"no existe el username {name}"})
+
+    return json.jsonify(users)
 
 
 @app.route("/users", methods=['POST'])
